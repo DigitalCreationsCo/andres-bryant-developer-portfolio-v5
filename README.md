@@ -32,6 +32,15 @@ This portfolio website is designed to present my AI and web development work in 
 
 ---
 
+## API Endpoints
+
+- `GET /users/:id` - Get user by ID
+- `POST /users` - Create new user
+- `DELETE /users/:id` - Delete user
+- `POST /users/:id/avatar` - Update user avatar
+
+---
+
 ## Installation & Setup
 
 1. Clone the repository:
