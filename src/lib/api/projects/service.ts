@@ -1,7 +1,11 @@
-import { projectsStore, projectDetailStore } from '$lib/store/projects';
-import type { Project, ProjectDetail } from '$lib/types';
-import { browser } from '$app/environment';
-import { error } from '@sveltejs/kit';
+import { projectsStore, projectDetailStore } from 
+'$lib/store/projects';
+import type { Project, ProjectDetail } from 
+'$lib/types';
+import { browser } from 
+'$app/environment';
+import { error } from 
+'@sveltejs/kit';
 
 const fetchingProjects = new Set<number>();
 
@@ -27,7 +31,10 @@ class ProjectService {
 		this.apiKey = apiKey;
 	}
 
-	async fetchProject({ project, fetch }: {
+	async fetchProject({
+		project,
+		fetch
+	}: {
 		project: Project;
 		fetch: any
 	}) {
@@ -64,12 +71,14 @@ class ProjectService {
 			};
 
 
-			return projectsStore.update((projectsMap) => {
+			projectsStore.update((projectsMap) => {
 				if (!projectsMap.has(newProject.id)) {
 					projectsMap.set(newProject.id, newProject);
 				}
 				return projectsMap;
 			});
+
+			return newProject;
 
 		} catch (error) {
 			console.error('Error fetching project:', error);

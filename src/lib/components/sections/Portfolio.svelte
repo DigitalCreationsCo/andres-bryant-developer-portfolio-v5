@@ -17,8 +17,6 @@
 	export let projectService: ProjectService;
 	export let initialProjectsData: Project[] = [];
 
-	const staticProjectsToShow = initialProjects.slice(0, 3);
-
 	/**
 	 * Make a writable variable for the UI list
 	 * Whenever the $projects store updates, this will update.
@@ -33,7 +31,7 @@
 		});
 
 		// Initialize with projects from the server, or static projects if none are provided
-		const initialData = initialProjectsData.length > 0 ? initialProjectsData : staticProjectsToShow;
+		const initialData = initialProjectsData.length > 0 ? initialProjectsData : initialProjects;
 		projectsStore.set(new Map(initialData.map((project) => [project.id, project])));
 
 		return () => {

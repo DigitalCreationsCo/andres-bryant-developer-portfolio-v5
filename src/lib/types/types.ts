@@ -13,6 +13,7 @@ interface Project {
 	starsCount?: number;
 	forksCount?: number;
 	downloadsCount?: number;
+	updatedAt?: string;
 }
 
 interface ProjectDetail extends Project {
