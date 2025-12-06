@@ -1,5 +1,9 @@
 <script lang="ts">
-	import { type ProjectService, getRecentGitHubReposAsProjects, initialProjects } from '$lib/api/projects';
+	import {
+		type ProjectService,
+		getRecentGitHubReposAsProjects,
+		initialProjects
+	} from '$lib/api/projects';
 	import { projectsStore, projects } from '$lib/store/projects';
 	import ProjectCard from '$lib/components/cards/ProjectCard.svelte';
 	import ProjectCardLoading from '$lib/components/cards/ProjectCardLoading.svelte';
@@ -30,7 +34,7 @@
 
 		// Initialize with projects from the server, or static projects if none are provided
 		const initialData = initialProjectsData.length > 0 ? initialProjectsData : staticProjectsToShow;
-		projectsStore.set(new Map(initialData.map(project => [project.id, project])));
+		projectsStore.set(new Map(initialData.map((project) => [project.id, project])));
 
 		return () => {
 			unsubscribe();
@@ -41,7 +45,7 @@
 
 	// Utility to refresh the projectsStore so that the $projects array UI updates
 	function forceProjectsArrayUpdate() {
-		projectsStore.update(map => new Map(map));
+		projectsStore.update((map) => new Map(map));
 	}
 
 	// Fetch projects when this section is appeared
@@ -75,8 +79,8 @@
 							}
 
 							// Force replace the projects store (to guarantee a new state and UI update)
-							projectsStore.update(_prev => {
-								const merged = new Map(initialData.map(p => [p.id, p])); // Use initialData here
+							projectsStore.update((_prev) => {
+								const merged = new Map(_prev);
 								// Give fetched projects priority
 								for (const [id, p] of rawMap) {
 									merged.set(id, p);
