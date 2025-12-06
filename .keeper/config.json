@@ -1,5 +1,5 @@
 {
-  "trigger_mode": "auto",
+  "trigger_mode": "interactive",
   "auto_commit": true,
   "agent": "cline",
   "agent_command": "",
