@@ -4,8 +4,7 @@
   "agent": "cline",
   "agent_command": "",
   "files_to_update": [
-    "README.md",
-    "docs/"
+    "README.md"
   ],
   "exclude": [
     ".keeper/*",

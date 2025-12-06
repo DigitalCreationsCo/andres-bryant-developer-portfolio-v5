@@ -26,18 +26,72 @@ You are strictly limited to the following actions:
 
 ## Changed Files
 ```
-empty.js
+src/lib/api/projects/service.ts
+src/lib/components/sections/Portfolio.svelte
 ```
 
 ## Code Changes
 ```diff
-diff --git a/empty.js b/empty.js
-deleted file mode 100644
-index 172e612..0000000
---- a/empty.js
-+++ /dev/null
-@@ -1,2 +0,0 @@
--// updating empty.js ///// update ////
--// joijj TESTING again
+diff --git a/src/lib/api/projects/service.ts b/src/lib/api/projects/service.ts
+index d9e2739..6004d49 100644
+--- a/src/lib/api/projects/service.ts
++++ b/src/lib/api/projects/service.ts
+@@ -219,4 +219,4 @@ class ProjectService {
+ 	}
+ }
+ 
+-export { ProjectService };
 \ No newline at end of file
++export { ProjectService };
+diff --git a/src/lib/components/sections/Portfolio.svelte b/src/lib/components/sections/Portfolio.svelte
+index 58348de..ef1712f 100644
+--- a/src/lib/components/sections/Portfolio.svelte
++++ b/src/lib/components/sections/Portfolio.svelte
+@@ -1,5 +1,9 @@
+ <script lang="ts">
+-	import { type ProjectService, getRecentGitHubReposAsProjects, initialProjects } from '$lib/api/projects';
++	import {
++		type ProjectService,
++		getRecentGitHubReposAsProjects,
++		initialProjects
++	} from '$lib/api/projects';
+ 	import { projectsStore, projects } from '$lib/store/projects';
+ 	import ProjectCard from '$lib/components/cards/ProjectCard.svelte';
+ 	import ProjectCardLoading from '$lib/components/cards/ProjectCardLoading.svelte';
+@@ -30,7 +34,7 @@
+ 
+ 		// Initialize with projects from the server, or static projects if none are provided
+ 		const initialData = initialProjectsData.length > 0 ? initialProjectsData : staticProjectsToShow;
+-		projectsStore.set(new Map(initialData.map(project => [project.id, project])));
++		projectsStore.set(new Map(initialData.map((project) => [project.id, project])));
+ 
+ 		return () => {
+ 			unsubscribe();
+@@ -41,7 +45,7 @@
+ 
+ 	// Utility to refresh the projectsStore so that the $projects array UI updates
+ 	function forceProjectsArrayUpdate() {
+-		projectsStore.update(map => new Map(map));
++		projectsStore.update((map) => new Map(map));
+ 	}
+ 
+ 	// Fetch projects when this section is appeared
+@@ -75,8 +79,8 @@
+ 							}
+ 
+ 							// Force replace the projects store (to guarantee a new state and UI update)
+-							projectsStore.update(_prev => {
+-								const merged = new Map(initialData.map(p => [p.id, p])); // Use initialData here
++							projectsStore.update((_prev) => {
++								const merged = new Map(_prev);
+ 								// Give fetched projects priority
+ 								for (const [id, p] of rawMap) {
+ 									merged.set(id, p);
+@@ -118,4 +122,4 @@
+ 			{/key}
+ 		{/if}
+ 	</div>
+-</div>
+\ No newline at end of file
++</div>
 ```
