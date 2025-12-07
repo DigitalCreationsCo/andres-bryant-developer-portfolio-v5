@@ -74,7 +74,7 @@ async function fetchGitHubRepos(
 
 	try {
 		const response = await fetchFn(
-			`${githubUserApiLink}/repos?sort=updated&direction=desc&per_page=100`,
+			`${githubUserApiLink}/repos?sort=pushed&direction=desc&per_page=100`,
 			{
 				method: 'GET',
 				headers: getGitHubHeaders(apiKey)
@@ -97,9 +97,14 @@ async function fetchGitHubRepos(
 		}
 
 		try {
+			const reposNotAllowed = [
+				githubUsername.toLocaleLowerCase(),
+				"food-delivery-app-react-native".toLocaleLowerCase(),
+				"mcp-directory".toLocaleLowerCase(),
+			]
 			const repos: GitHubRepo[] = JSON.parse(text);
 			const filteredRepos = Array.isArray(repos)
-				? repos.filter(repo => repo.name.toLowerCase() !== githubUsername.toLowerCase())
+				? repos.filter(repo => !reposNotAllowed.includes(repo.name.toLowerCase()))
 				: [];
 			return filteredRepos;
 		} catch (parseError) {
