@@ -1,11 +1,7 @@
-import { projectsStore, projectDetailStore } from 
-'$lib/store/projects';
-import type { Project, ProjectDetail } from 
-'$lib/types';
-import { browser } from 
-'$app/environment';
-import { error } from 
-'@sveltejs/kit';
+import { projectsStore, projectDetailStore } from '$lib/store/projects';
+import type { Project, ProjectDetail } from '$lib/types';
+import { browser } from '$app/environment';
+import { error } from '@sveltejs/kit';
 
 const fetchingProjects = new Set<number>();
 
@@ -15,12 +11,12 @@ function getGitHubHeaders(apiKey?: string): Record<string, string> {
 	const headers: Record<string, string> = {
 		'Content-Type': 'application/json'
 	};
-	
+
 	// Add Authorization header if API key is available
 	if (apiKey) {
 		headers['Authorization'] = `token ${apiKey}`;
 	}
-	
+
 	return headers;
 }
 
@@ -31,13 +27,7 @@ class ProjectService {
 		this.apiKey = apiKey;
 	}
 
-	async fetchProject({
-		project,
-		fetch
-	}: {
-		project: Project;
-		fetch: any
-	}) {
+	async fetchProject({ project, fetch }: { project: Project; fetch: any }) {
 		if (fetchingProjects.has(project.id)) {
 			console.warn(`Skipping duplicate fetch for project: ${project.name}`);
 			return;
@@ -70,7 +60,6 @@ class ProjectService {
 				downloadsCount: await this.getDownloadsCount(project.url)
 			};
 
-
 			projectsStore.update((projectsMap) => {
 				if (!projectsMap.has(newProject.id)) {
 					projectsMap.set(newProject.id, newProject);
@@ -79,7 +68,6 @@ class ProjectService {
 			});
 
 			return newProject;
-
 		} catch (error) {
 			console.error('Error fetching project:', error);
 		} finally {
@@ -105,6 +93,24 @@ class ProjectService {
 			let newProject: ProjectDetail;
 
 			if (response.status === 200) {
+				const liveUrl = project.liveUrl || json.homepage;
+				let hasLiveUrl = Boolean(liveUrl);
+
+				if (hasLiveUrl) {
+					try {
+						// Check if live URL is reachable (not 404)
+						const liveRes = await fetch(liveUrl, { method: 'HEAD' });
+						if (liveRes.status === 404) {
+							hasLiveUrl = false;
+						}
+					} catch (e) {
+						console.warn('Error checking live URL:', e);
+						// If fetch fails (e.g. CORS or network), we might want to keep it or hide it.
+						// User only specified 404. But if it throws, we can't be sure.
+						// We'll keep it unless 404.
+					}
+				}
+
 				newProject = {
 					id: project.id,
 					slug: project.slug,
@@ -115,8 +121,8 @@ class ProjectService {
 					imageUrl: project.imageUrl,
 					tags: [...project.tags, json?.language].filter(Boolean),
 					repositoryUrl: json['svn_url'],
-					hasLiveUrl: Boolean(project.liveUrl || json.homepage || false),
-					liveUrl: project.liveUrl || json.homepage,
+					hasLiveUrl: hasLiveUrl,
+					liveUrl: liveUrl,
 					readmeUrl: project.readmeUrl,
 					starsCount: json.stargazers_count,
 					forksCount: json.forks,
@@ -203,7 +209,7 @@ class ProjectService {
 		const headers = getGitHubHeaders(this.apiKey);
 		// Remove Content-Type for this endpoint if not needed
 		delete headers['Content-Type'];
-		
+
 		const response = await fetch(`${url}/releases`, {
 			method: 'GET',
 			headers: headers

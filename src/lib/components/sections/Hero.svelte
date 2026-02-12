@@ -24,11 +24,11 @@
 		class:opacity-100={$fadeSequence.hero}
 	>
 		<h1
-			class="absolute leading-relaxed text-xl bottom-1/4 left-1/2 md:left-0 md:bottom-4 m-auto items-center font-medium md:m-10 transition-opacity duration-500"
+			class="absolute leading-relaxed text-center text-xl bottom-1/4 left-1/2 -translate-x-1/2 md:bottom-4 m-auto items-center font-medium md:m-10 transition-opacity duration-500"
 			class:opacity-0={!$fadeSequence.text}
 			class:opacity-100={$fadeSequence.text}
 		>
-			<span class="pb-20">BRYANT MEJIA</span>
+			<span class="pb-20">Bryant Mejia</span>
 			<Typewriter
 				mode={'loop'}
 				delay={isFirstLoad ? 10000 : 1000}
@@ -38,9 +38,9 @@
 				wordInterval={Math.random() * 4 * 1000}
 			>
 				<span>Software Developer </span>
-				<span>Full Stack </span>
+				<span>Full Stack Engineer </span>
 				<span>Graphic Interface </span>
-				<span>T D D </span>
+				<span>TDD </span>
 				<span>On a mission... </span>
 				<span>To Transform Data. </span>
 				<span>Let's Build the Future. </span>

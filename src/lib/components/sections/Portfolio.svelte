@@ -53,11 +53,11 @@
 				if (!entry.isIntersecting) return;
 
 				setTimeout(async () => {
-					console.log('Fetching 6 most recent GitHub repositories');
+					console.log('Fetching 100 most recent GitHub repositories');
 
 					try {
-						// Fetch 6 most recent GitHub repos dynamically
-						const githubProjects = await getRecentGitHubReposAsProjects(fetch, undefined, 6);
+						// Fetch 100 most recent GitHub repos dynamically
+						const githubProjects = await getRecentGitHubReposAsProjects(fetch, undefined, 100);
 						console.log('githubProjects:', githubProjects);
 
 						if (githubProjects && githubProjects.length > 0) {

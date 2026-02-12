@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { ProjectDetail } from '$lib/types';
+	import { marked } from 'marked';
 
 	export let project: ProjectDetail;
 	export let readmeContent: string | null = null;
@@ -16,7 +17,7 @@
 	<div
 		class="w-full flex flex-col lg:flex-row-reverse lg:justify-between gap-4 md:gap-8 lg:gap-12 mb-24 lg:mb-32"
 	>
-		<div class="w-full">
+		<div class="w-full lg:mr-10">
 			<!-- Image preview -->
 			{#if project.imageUrl}
 				<img class="w-full aspect-[2/1] object-cover" src={project.imageUrl} alt="Preview" />{/if}
@@ -82,7 +83,7 @@
 			<p class="text-slate-500">Loading README...</p>
 		{:else if readmeContent}
 			<div class="prose prose-slate dark:prose-invert max-w-none">
-				<pre class="whitespace-pre-wrap font-mono text-sm bg-slate-50 dark:bg-slate-900 p-4 rounded overflow-x-auto"><code>{readmeContent}</code></pre>
+				{@html marked(readmeContent)}
 			</div>
 		{:else}
 			<p class="text-slate-500">README not available for this project.</p>

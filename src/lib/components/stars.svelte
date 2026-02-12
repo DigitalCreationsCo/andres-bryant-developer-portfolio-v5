@@ -2,11 +2,11 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { browser } from '$app/environment';
 
-	export let starCount = 10000;
-	export let minSize = 0.1;
-	export let maxSize = 2;
-	export let minDuration = 2000;
-	export let maxDuration = 10000;
+	export let starCount = 3000;
+	export let minSize = 0.6;
+	export let maxSize = 2.5;
+	export let minDuration = 500;
+	export let maxDuration = 3000;
 
 	let canvas;
 	let ctx;
