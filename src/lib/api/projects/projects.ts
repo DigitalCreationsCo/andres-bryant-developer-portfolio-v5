@@ -81,11 +81,11 @@ async function fetchGitHubRepos(
 		);
 
 		if (!response.ok) {
-			console.warn(`GitHub API returned ${response.status}: ${response.statusText}`);
+			const error = new Error(`GitHub API returned ${response.status}: ${response.statusText}`);
 			if (response.status === 403) {
 				console.warn('GitHub API rate limit may have been exceeded');
 			}
-			return [];
+			throw error;
 		}
 
 		const text = await response.text();
@@ -109,8 +109,8 @@ async function fetchGitHubRepos(
 			return [];
 		}
 	} catch (error) {
-		console.error('Error fetching GitHub repos:', error);
-		return [];
+		console.warn('Error fetching GitHub repos:', error);
+		throw error;
 	}
 }
 
@@ -157,7 +157,7 @@ async function getInitialProjects(
 			return recentRepos;
 		}
 	} catch (error) {
-		console.error('Error in getInitialProjects:', error);
+		console.warn('Error in getInitialProjects:', error);
 	}
 	return [];
 }
@@ -175,7 +175,21 @@ async function getRecentGitHubReposAsProjects(
 			githubProjects = repos.slice(0, limit).map((repo) => transformGitHubRepoToProject(repo));
 		}
 	} catch (error) {
-		console.error('Error in getRecentGitHubReposAsProjects:', error);
+		console.warn('Error in getRecentGitHubReposAsProjects:', error);
+		return [
+			{
+				id: 0,
+				name: 'error',
+				description: 'Could not fetch projects. Please try again later.',
+				slug: '',
+				url: '',
+				liveUrl: '',
+				imageUrl: '',
+				readmeUrl: '',
+				tags: [],
+				updatedAt: ''
+			}
+		];
 	}
 
 	// Create a map to store unique projects, prioritizing GitHub projects
