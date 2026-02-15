@@ -21,7 +21,9 @@
 		<div>
 			<Typewriter mode={'cascade'} delay={600} interval={10} showCursorOnDelay={false}>
 				<h2>
-					{project.name === 'limit' ? 'API rate limit exceeded' : 'Failed to fetch data'}
+					{project.name === 'limit'
+						? 'API rate limit exceeded'
+						: 'An error occurred while fetching projects.'}
 				</h2>
 				<h2>
 					{project.description}

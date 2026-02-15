@@ -90,7 +90,7 @@
 							console.warn('No GitHub repositories found or API request failed');
 						}
 					} catch (error) {
-						console.error('Error fetching GitHub repos:', error);
+						console.warn('Error fetching GitHub repos:', error);
 					}
 
 					isIntersecting = true;
