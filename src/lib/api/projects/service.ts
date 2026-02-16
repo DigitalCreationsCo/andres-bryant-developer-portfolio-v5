@@ -108,6 +108,7 @@ class ProjectService {
 						// If fetch fails (e.g. CORS or network), we might want to keep it or hide it.
 						// User only specified 404. But if it throws, we can't be sure.
 						// We'll keep it unless 404.
+						hasLiveUrl = false;
 					}
 				}
 
