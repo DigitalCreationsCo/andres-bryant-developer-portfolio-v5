@@ -123,7 +123,7 @@
 
 <div class="stars-container">
 	{#if browser}
-		<canvas bind:this={canvas} class="stars-canvas" />
+		<canvas bind:this={canvas} class="stars-canvas"></canvas>
 		<slot />
 	{/if}
 </div>

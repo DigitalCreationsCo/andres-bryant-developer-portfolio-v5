@@ -1,4 +1,5 @@
 import type { Project } from '$lib/types';
+import { building } from '$app/environment';
 
 /**
  * WHY DO I GET 'error: fetch is not a function' IN SVELTE/SVELTEKIT?
@@ -27,6 +28,10 @@ import type { Project } from '$lib/types';
 const githubApiLink = 'https://api.github.com/repos/digitalcreationsco';
 const githubUserApiLink = 'https://api.github.com/users/digitalcreationsco';
 const githubUsername = 'digitalcreationsco';
+
+let cachedRepos: GitHubRepo[] | null = null;
+let lastFetchTime = 0;
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
 // Helper function to get GitHub API headers with authentication
 function getGitHubHeaders(apiKey?: string): Record<string, string> {
@@ -59,6 +64,13 @@ async function fetchGitHubRepos(
 	fetchParam?: typeof globalThis.fetch,
 	apiKey?: string
 ): Promise<GitHubRepo[]> {
+	if (building && cachedRepos) {
+		return cachedRepos;
+	}
+	if (cachedRepos && Date.now() - lastFetchTime < CACHE_DURATION) {
+		return cachedRepos;
+	}
+
 	const fetchFn: typeof globalThis.fetch =
 		fetchParam ||
 		(typeof window !== 'undefined' && window.fetch) ||
@@ -103,6 +115,10 @@ async function fetchGitHubRepos(
 			const filteredRepos = Array.isArray(repos)
 				? repos.filter((repo) => !reposNotAllowed.includes(repo.name.toLowerCase()))
 				: [];
+
+			cachedRepos = filteredRepos;
+			lastFetchTime = Date.now();
+
 			return filteredRepos;
 		} catch (parseError) {
 			console.error('Failed to parse GitHub API response:', parseError);

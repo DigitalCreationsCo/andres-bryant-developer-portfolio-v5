@@ -1,9 +1,10 @@
 import { projectsStore, projectDetailStore } from '$lib/store/projects';
 import type { Project, ProjectDetail } from '$lib/types';
-import { browser } from '$app/environment';
+import { browser, building } from '$app/environment';
 import { error } from '@sveltejs/kit';
 
 const fetchingProjects = new Set<number>();
+const downloadsCache = new Map<string, number>();
 
 // Helper function to get GitHub API headers with authentication
 // apiKey should be passed from server-side code
@@ -96,19 +97,27 @@ class ProjectService {
 				const liveUrl = project.liveUrl || json.homepage;
 				let hasLiveUrl = Boolean(liveUrl);
 
-				if (hasLiveUrl) {
+				if (hasLiveUrl && !building) {
+					const controller = new AbortController();
+					const timeoutId = setTimeout(() => controller.abort(), 2000);
 					try {
 						// Check if live URL is reachable (not 404)
-						const liveRes = await fetch(liveUrl, { method: 'HEAD' });
+						const liveRes = await fetch(liveUrl, {
+							method: 'HEAD',
+							signal: controller.signal
+						});
+
 						if (liveRes.status === 404) {
 							hasLiveUrl = false;
 						}
 					} catch (e) {
-						console.warn('Error checking live URL:', e);
+						console.warn(`Error checking live URL ${liveUrl}: ${(e as Error).message}`);
 						// If fetch fails (e.g. CORS or network), we might want to keep it or hide it.
 						// User only specified 404. But if it throws, we can't be sure.
 						// We'll keep it unless 404.
 						hasLiveUrl = false;
+					} finally {
+						clearTimeout(timeoutId);
 					}
 				}
 
@@ -207,18 +216,29 @@ class ProjectService {
 	}
 
 	async getDownloadsCount(url: string) {
+		if (building && downloadsCache.has(url)) {
+			return downloadsCache.get(url)!;
+		}
+
 		const headers = getGitHubHeaders(this.apiKey);
 		// Remove Content-Type for this endpoint if not needed
 		delete headers['Content-Type'];
 
-		const response = await fetch(`${url}/releases`, {
-			method: 'GET',
-			headers: headers
-		});
-
 		try {
+			const controller = new AbortController();
+			const timeoutId = setTimeout(() => controller.abort(), 2000);
+
+			const response = await fetch(`${url}/releases`, {
+				method: 'GET',
+				headers: headers,
+				signal: controller.signal
+			});
+			clearTimeout(timeoutId);
+
 			const json = await response.text();
 			const releases = JSON.parse(json);
+
+			if (!Array.isArray(releases)) return 0;
 
 			let count = 0;
 
@@ -227,6 +247,8 @@ class ProjectService {
 					count += releases[i].assets[j].download_count;
 				}
 			}
+
+			if (building) downloadsCache.set(url, count);
 
 			return count;
 		} catch (error) {

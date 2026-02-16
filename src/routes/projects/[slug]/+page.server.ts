@@ -1,12 +1,12 @@
 import { error } from '@sveltejs/kit';
 import { ProjectService, getInitialProjects, initialProjects } from '$lib/api/projects';
 import { type Project, type ProjectDetail } from '$lib/types';
-import { dev } from '$app/environment';
+import { dev, building } from '$app/environment';
 import type { EntryGenerator, PageServerLoad } from './$types';
 import { GITHUB_API_KEY } from '$env/static/private';
 
 /** @type {PageServerLoad} */
-export async function load({ params, fetch }) {
+export const load: PageServerLoad = async ({ params, fetch }) => {
 	try {
 		const apiKey = GITHUB_API_KEY;
 		// Always fallback to static projects during prerender to avoid 404s
@@ -47,11 +47,16 @@ export async function load({ params, fetch }) {
 		}
 		throw error(500, 'Failed to load project');
 	}
-}
+};
 
 export const entries: EntryGenerator = async () => {
 	// Fetch all projects (static and dynamic) for entries generation to ensure all routes are prerendered
 	const apiKey = GITHUB_API_KEY; // Access API key for fetching
 	const allProjects = await getInitialProjects(fetch, apiKey); // Use global fetch for prerendering
+
+	if (building) {
+		return allProjects.slice(0, 15).map(({ slug }) => ({ slug }));
+	}
+
 	return allProjects.map(({ slug }) => ({ slug }));
 };
