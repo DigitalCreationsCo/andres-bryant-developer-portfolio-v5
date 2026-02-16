@@ -20,7 +20,7 @@
 </script>
 
 {#if TwinklingStars}
-	<TwinklingStars starCount={10000}>
+	<svelte:component this={TwinklingStars} starCount={10000}>
 		<div class="relative h-full md:max-w-3xl p-10 m-auto md:content-center bg-black md:bg-inherit">
 			<div class="absolute top-0 left-0 h-1/2 mb-10 overflow-clip">
 				<img
@@ -50,5 +50,5 @@
 I'm a full-stack software engineer with 5+ years of experience designing and delivering scalable software, data infrastructure, and AI systems for startups and modern enterprises. My work sits at the intersection of data, infrastructure, and user experience—helping businesses unlock value and people make better decisions in the flow of work and life.`}
 			</h3>
 		</div>
-	</TwinklingStars>
+	</svelte:component>
 {/if}
