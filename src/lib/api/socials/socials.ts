@@ -12,37 +12,38 @@ export const githubLink = 'https://github.com/digitalcreationsco';
 export const linkedInLink = 'https://www.linkedin.com/in/bryant-mejia-085669331/';
 export const whatsappLink = 'https://wa.me/62895338593923';
 export const emailLink = 'mailto:bryantmejia722@outlook.com';
-export const resumeLink = 'https://docs.google.com/document/d/1_jt27qBweuuqBo8RO8Wiow-M4FlV3knL/edit?usp=drivesdk&ouid=111182721032012530408&rtpof=true&sd=true';
+export const resumeLink =
+	'https://docs.google.com/document/d/1_jt27qBweuuqBo8RO8Wiow-M4FlV3knL/edit?usp=drivesdk&ouid=111182721032012530408&rtpof=true&sd=true';
 
 export const socials = [
 	{
 		social: 'View Resume',
 		name: '',
-		link: resumeLink,
+		link: resumeLink
 		// colorVariant: { key: 'email' } as ButtonColorVariant,
 		// icon: Email
 	},
 	{
 		social: 'Github',
 		name: 'Digital Creations Co',
-		link: githubLink,
+		link: githubLink
 		// colorVariant: { key: 'github' } as ButtonColorVariant,
 		// icon: Github
 	},
 	{
 		social: 'LinkedIn',
 		name: 'Bryant Mejia',
-		link: linkedInLink,
+		link: linkedInLink
 		// colorVariant: { key: 'linkedIn' } as ButtonColorVariant,
 		// icon: LinkedIn
 	},
 	{
 		social: 'Email',
 		name: 'Bryantmejia722@outlook.com',
-		link: emailLink,
+		link: emailLink
 		// colorVariant: { key: 'email' } as ButtonColorVariant,
 		// icon: Email
-	},
+	}
 	// {
 	// 	social: 'Facebook',
 	// 	name: 'Bryant Mejia',

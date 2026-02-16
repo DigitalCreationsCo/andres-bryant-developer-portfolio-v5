@@ -134,9 +134,9 @@ class ProjectService {
 			} else {
 				let fallbackData: ProjectDetail;
 
-				if (browser && localStorage.getItem('projectDetail')) {
+				if (browser && window.localStorage.getItem('projectDetail')) {
 					fallbackData = {
-						...(JSON.parse(localStorage.getItem('projectDetail') ?? '{}') as ProjectDetail),
+						...(JSON.parse(window.localStorage.getItem('projectDetail') ?? '{}') as ProjectDetail),
 						imageText: 'Server error: API rate limit exceeded'
 					};
 				} else if (response.status === 403) {
@@ -164,9 +164,9 @@ class ProjectService {
 
 			let fallbackData: ProjectDetail;
 
-			if (browser && localStorage.getItem('projectDetail')) {
+			if (browser && window.localStorage.getItem('projectDetail')) {
 				fallbackData = {
-					...(JSON.parse(localStorage.getItem('projectDetail') ?? '{}') as ProjectDetail),
+					...(JSON.parse(window.localStorage.getItem('projectDetail') ?? '{}') as ProjectDetail),
 					imageText: 'No internet connection'
 				};
 			} else {
