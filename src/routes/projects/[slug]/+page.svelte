@@ -6,9 +6,10 @@
 	import { fade } from 'svelte/transition';
 
 	export let data: PageData;
-
+	
 	const { projectDetail, readmeContent } = data;
 	const isLoadingReadme = false; // Readme is now fetched server-side
+
 </script>
 
 <svelte:head>
