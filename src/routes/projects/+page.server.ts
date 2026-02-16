@@ -8,7 +8,7 @@ export const load: PageServerLoad = async ({ fetch }) => {
 	// Use static API key for prerendering
 	apiKey = GITHUB_API_KEY;
 
-	const projects = await getRecentGitHubReposAsProjects(fetch, apiKey, 100); // Fetch 100 most recent projects
+	const projects = await getRecentGitHubReposAsProjects(fetch, apiKey, 7);
 
 	return {
 		projects: projects

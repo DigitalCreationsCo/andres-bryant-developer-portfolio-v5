@@ -54,8 +54,7 @@
 
 				setTimeout(async () => {
 					try {
-						// Fetch 100 most recent GitHub repos dynamically
-						const githubProjects = await getRecentGitHubReposAsProjects(fetch, undefined, 100);
+						const githubProjects = await getRecentGitHubReposAsProjects(fetch, undefined, 7);
 
 						if (githubProjects && githubProjects.length > 0) {
 							// Fetch details for each project and collect up-to-date Project objects

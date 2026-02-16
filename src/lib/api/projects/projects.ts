@@ -62,7 +62,8 @@ interface GitHubRepo {
 // Accepts an optional fetch param; falls back to global fetch for browser or node >=18
 async function fetchGitHubRepos(
 	fetchParam?: typeof globalThis.fetch,
-	apiKey?: string
+	apiKey?: string,
+	limit: number = 100
 ): Promise<GitHubRepo[]> {
 	if (building && cachedRepos) {
 		return cachedRepos;
@@ -85,7 +86,7 @@ async function fetchGitHubRepos(
 
 	try {
 		const response = await fetchFn(
-			`${githubUserApiLink}/repos?sort=pushed&direction=desc&per_page=100`,
+			`${githubUserApiLink}/repos?sort=pushed&direction=desc&per_page=${limit}`,
 			{
 				method: 'GET',
 				headers: getGitHubHeaders(apiKey)
@@ -186,7 +187,7 @@ async function getRecentGitHubReposAsProjects(
 	let githubProjects: Project[] = [];
 
 	try {
-		const repos = await fetchGitHubRepos(fetchParam, apiKey);
+		const repos = await fetchGitHubRepos(fetchParam, apiKey, limit);
 		if (repos && repos.length > 0) {
 			githubProjects = repos.slice(0, limit).map((repo) => transformGitHubRepoToProject(repo));
 		}
