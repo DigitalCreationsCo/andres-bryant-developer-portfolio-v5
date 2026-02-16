@@ -53,12 +53,9 @@
 				if (!entry.isIntersecting) return;
 
 				setTimeout(async () => {
-					console.log('Fetching 100 most recent GitHub repositories');
-
 					try {
 						// Fetch 100 most recent GitHub repos dynamically
 						const githubProjects = await getRecentGitHubReposAsProjects(fetch, undefined, 100);
-						console.log('githubProjects:', githubProjects);
 
 						if (githubProjects && githubProjects.length > 0) {
 							// Fetch details for each project and collect up-to-date Project objects
