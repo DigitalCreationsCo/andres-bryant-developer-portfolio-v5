@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
 	import { browser } from '$app/environment';
 
@@ -8,12 +8,20 @@
 	export let minDuration = 500;
 	export let maxDuration = 3000;
 
-	let canvas;
-	let ctx;
-	let animationFrameId;
-	let stars = [];
+	let canvas: HTMLCanvasElement;
+	let ctx: CanvasRenderingContext2D;
+	let animationFrameId: number;
+	let stars: Star[] = [];
 
 	class Star {
+		x = 0;
+		y = 0;
+		size = 0;
+		duration = 0;
+		color = '';
+		startTime = 0;
+		opacity = 0;
+
 		constructor() {
 			this.reset();
 		}
@@ -50,7 +58,7 @@
 			}
 		}
 
-		draw(ctx) {
+		draw(ctx: CanvasRenderingContext2D) {
 			ctx.fillStyle = this.color;
 			ctx.globalAlpha = this.opacity;
 			ctx.fillRect(this.x, this.y, this.size, this.size);
@@ -60,7 +68,7 @@
 	function initStars() {
 		if (browser) {
 			stars = Array(starCount)
-				.fill()
+				.fill(null)
 				.map(() => new Star());
 		}
 	}
@@ -88,7 +96,10 @@
 	}
 
 	onMount(() => {
-		ctx = canvas.getContext('2d');
+		const context = canvas.getContext('2d');
+		if (context) {
+			ctx = context;
+		}
 
 		// Handle window resize
 		window.addEventListener('resize', resizeCanvas);
